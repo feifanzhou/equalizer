@@ -12,6 +12,9 @@
 		3D271AC219D4B314005183B4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3D271AC119D4B314005183B4 /* Images.xcassets */; };
 		3D271AC519D4B314005183B4 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D271AC319D4B314005183B4 /* MainMenu.xib */; };
 		3D271AD119D4B314005183B4 /* EqualizerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D271AD019D4B314005183B4 /* EqualizerTests.m */; };
+		3D271ADC19D4B3DF005183B4 /* EQVisualizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D271ADB19D4B3DF005183B4 /* EQVisualizer.m */; };
+		3D271ADF19D4B7A7005183B4 /* EQPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D271ADE19D4B7A7005183B4 /* EQPoint.m */; };
+		3D271AE419D4C84E005183B4 /* FunctionalNSArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D271AE319D4C84E005183B4 /* FunctionalNSArray.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +38,12 @@
 		3D271ACA19D4B314005183B4 /* EqualizerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EqualizerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D271ACF19D4B314005183B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3D271AD019D4B314005183B4 /* EqualizerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EqualizerTests.m; sourceTree = "<group>"; };
+		3D271ADA19D4B3DF005183B4 /* EQVisualizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EQVisualizer.h; sourceTree = "<group>"; };
+		3D271ADB19D4B3DF005183B4 /* EQVisualizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EQVisualizer.m; sourceTree = "<group>"; };
+		3D271ADD19D4B7A7005183B4 /* EQPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EQPoint.h; sourceTree = "<group>"; };
+		3D271ADE19D4B7A7005183B4 /* EQPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EQPoint.m; sourceTree = "<group>"; };
+		3D271AE219D4C84E005183B4 /* FunctionalNSArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FunctionalNSArray.h; sourceTree = "<group>"; };
+		3D271AE319D4C84E005183B4 /* FunctionalNSArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FunctionalNSArray.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +89,8 @@
 				3D271ABF19D4B314005183B4 /* AppDelegate.m */,
 				3D271AC119D4B314005183B4 /* Images.xcassets */,
 				3D271AC319D4B314005183B4 /* MainMenu.xib */,
+				3D271AE019D4B7AF005183B4 /* Models */,
+				3D271AE119D4B7B7005183B4 /* Views */,
 				3D271ABA19D4B314005183B4 /* Supporting Files */,
 			);
 			path = Equalizer;
@@ -109,6 +120,26 @@
 				3D271ACF19D4B314005183B4 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3D271AE019D4B7AF005183B4 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				3D271AE219D4C84E005183B4 /* FunctionalNSArray.h */,
+				3D271AE319D4C84E005183B4 /* FunctionalNSArray.m */,
+				3D271ADD19D4B7A7005183B4 /* EQPoint.h */,
+				3D271ADE19D4B7A7005183B4 /* EQPoint.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		3D271AE119D4B7B7005183B4 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				3D271ADA19D4B3DF005183B4 /* EQVisualizer.h */,
+				3D271ADB19D4B3DF005183B4 /* EQVisualizer.m */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -210,8 +241,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D271ADF19D4B7A7005183B4 /* EQPoint.m in Sources */,
 				3D271AC019D4B314005183B4 /* AppDelegate.m in Sources */,
 				3D271ABD19D4B314005183B4 /* main.m in Sources */,
+				3D271AE419D4C84E005183B4 /* FunctionalNSArray.m in Sources */,
+				3D271ADC19D4B3DF005183B4 /* EQVisualizer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
