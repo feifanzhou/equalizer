@@ -10,4 +10,5 @@
 
 @interface EQVisualizer : NSView
 @property (strong, nonatomic) NSMutableArray *eqPoints;
+@property (assign, nonatomic) NSPoint mouseoverPoint;
 @end

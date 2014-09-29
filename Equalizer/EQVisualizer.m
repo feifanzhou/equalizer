@@ -12,6 +12,19 @@
 
 @implementation EQVisualizer
 
+- (id)initWithFrame:(NSRect)frameRect {
+	if (!(self = [super initWithFrame:frameRect]))
+		return nil;
+	self.mouseoverPoint = CGPointMake(-10, -10);
+	self.eqPoints = [NSMutableArray array];
+	
+	NSTrackingArea *trackingArea = [[NSTrackingArea alloc] initWithRect:[self bounds]
+															   options: (NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved | NSTrackingActiveInKeyWindow)
+																 owner:self userInfo:nil];
+	[self addTrackingArea:trackingArea];
+	return self;
+}
+
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
 	
@@ -39,25 +52,52 @@
 		CGContextAddEllipseInRect(context, circleRect);
 		CGContextDrawPath(context, kCGPathStroke);
 	}
+	
+	// Draw mouseover point if needed
+	if (self.mouseoverPoint.x < 0 && self.mouseoverPoint.y < 0)
+		return;
+	CGRect circleRect = CGRectMake(self.mouseoverPoint.x - 5, baselineY - 5, 10.0, 10.0);
+	CGContextBeginPath(context);
+	CGContextSetRGBStrokeColor(context, 0, 0, 0, 0.25);
+	CGContextAddEllipseInRect(context, circleRect);
+	CGContextDrawPath(context, kCGPathStroke);
+}
+
+# pragma mark -
+# pragma mark Utility methods
+- (NSPoint)pointFromMouseEvent:(NSEvent *)theEvent {
+	NSPoint eventLocation = [theEvent locationInWindow];
+	NSPoint center = [self convertPoint:eventLocation fromView:nil];
+	return center;
 }
 
 # pragma mark - 
 # pragma mark Event handlers
 - (void)mouseDown:(NSEvent *)theEvent {
-	if (!self.eqPoints)
-		self.eqPoints = [NSMutableArray array];
-	else {
-		NSArray *deselectedArray = [self.eqPoints mapWithBlock:^(id obj, NSUInteger idx) {
-			EQPoint *point = [[EQPoint alloc] init];
-			point.location = ((EQPoint *)obj).location;
-			point.isSelected = NO;
-			return point;
-		}];
-		self.eqPoints = [NSMutableArray arrayWithArray:deselectedArray];
-	}
-	NSPoint eventLocation = [theEvent locationInWindow];
-	NSPoint center = [self convertPoint:eventLocation fromView:nil];
+	NSArray *deselectedArray = [self.eqPoints mapWithBlock:^(id obj, NSUInteger idx) {
+		EQPoint *point = [[EQPoint alloc] init];
+		point.location = ((EQPoint *)obj).location;
+		point.isSelected = NO;
+		return point;
+	}];
+	self.eqPoints = [NSMutableArray arrayWithArray:deselectedArray];
+	NSPoint center = [self pointFromMouseEvent:theEvent];
 	[self.eqPoints addObject:[[EQPoint alloc] initWithPoint:center]];
+	[self setNeedsDisplay:YES];
+}
+
+- (void)mouseEntered:(NSEvent *)theEvent {
+	NSPoint enterPoint = [self pointFromMouseEvent:theEvent];
+	self.mouseoverPoint = enterPoint;
+	[self setNeedsDisplay:YES];
+}
+- (void)mouseExited:(NSEvent *)theEvent {
+	self.mouseoverPoint = NSMakePoint(-10, -10);
+	[self setNeedsDisplay:YES];
+}
+- (void)mouseMoved:(NSEvent *)theEvent {
+	NSPoint point = [self pointFromMouseEvent:theEvent];
+	self.mouseoverPoint = point;
 	[self setNeedsDisplay:YES];
 }
 
