@@ -12,6 +12,28 @@
 
 @implementation EQVisualizer
 
+# pragma mark -
+# pragma mark Utility methods
+- (NSPoint)pointFromMouseEvent:(NSEvent *)theEvent {
+	NSPoint eventLocation = [theEvent locationInWindow];
+	NSPoint center = [self convertPoint:eventLocation fromView:nil];
+	return center;
+}
+
+- (EQPoint *)hoveringNodeNearPoint:(NSPoint)point {
+	NSArray *nearestNodes = [self.eqPoints filterWithBlock:^BOOL(id obj, NSUInteger idx) {
+		EQPoint *node = (EQPoint *)obj;
+		return node.location.x - 5 <= point.x && node.location.x + 5 >= point.x && node.location.y - 5 <= point.y && node.location.y + 5 >= point.y;
+	}];
+	return ([nearestNodes count] > 0) ? nearestNodes[0] : nil;
+}
+
+- (CGFloat)baselineY {
+	return (2.0/3.0) * [self bounds].size.height;
+}
+
+#pragma mark -
+#pragma mark View methods
 - (id)initWithFrame:(NSRect)frameRect {
 	if (!(self = [super initWithFrame:frameRect]))
 		return nil;
@@ -30,8 +52,7 @@
 	
 	CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
 	// Draw baseline first
-	CGFloat viewHeight = [self bounds].size.height;
-	CGFloat baselineY = (2.0/3.0) * viewHeight;
+	CGFloat baselineY = [self baselineY];
 	CGContextBeginPath(context);
 	CGContextSetRGBStrokeColor(context, 0, 0, 0, 0.3);
 	CGContextSetLineWidth(context, 1.0);
@@ -63,14 +84,6 @@
 	CGContextDrawPath(context, kCGPathStroke);
 }
 
-# pragma mark -
-# pragma mark Utility methods
-- (NSPoint)pointFromMouseEvent:(NSEvent *)theEvent {
-	NSPoint eventLocation = [theEvent locationInWindow];
-	NSPoint center = [self convertPoint:eventLocation fromView:nil];
-	return center;
-}
-
 # pragma mark - 
 # pragma mark Event handlers
 - (void)mouseDown:(NSEvent *)theEvent {
@@ -82,6 +95,7 @@
 	}];
 	self.eqPoints = [NSMutableArray arrayWithArray:deselectedArray];
 	NSPoint center = [self pointFromMouseEvent:theEvent];
+	center.y = [self baselineY];
 	[self.eqPoints addObject:[[EQPoint alloc] initWithPoint:center]];
 	[self setNeedsDisplay:YES];
 }

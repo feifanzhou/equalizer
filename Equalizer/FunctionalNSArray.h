@@ -9,7 +9,9 @@
 #import <Foundation/Foundation.h>
 
 @interface NSArray (Map)
-
 - (NSArray *)mapWithBlock:(id (^)(id obj, NSUInteger idx))block;
+@end
 
+@interface NSArray (Filter)
+- (NSArray *)filterWithBlock:(BOOL (^)(id obj, NSUInteger idx))block;
 @end
