@@ -28,7 +28,7 @@
 - (EQPoint *)hoveringNodeNearPoint:(NSPoint)point {
 	NSArray *nearestNodes = [self.eqPoints filterWithBlock:^BOOL(id obj, NSUInteger idx) {
 		EQPoint *node = (EQPoint *)obj;
-		return node.location.x - 5 <= point.x && node.location.x + 5 >= point.x && node.location.y - 5 <= point.y && node.location.y + 5 >= point.y;
+		return node.location.x - 5 <= point.x && node.location.x + 5 >= point.x;
 	}];
 	return ([nearestNodes count] > 0) ? nearestNodes[0] : nil;
 }
@@ -56,7 +56,6 @@
 
 # pragma mark -
 # pragma mark Drawing methods
-
 - (void)drawBaseline:(CGContextRef)context {
 	CGFloat baselineY = [self baselineY];
 	CGContextBeginPath(context);
@@ -75,7 +74,7 @@
 	
 	// Draw vertical line
 	CGContextBeginPath(context);
-	CGContextSetRGBStrokeColor(context, 0, 0, 0, 0.1);
+	CGContextSetRGBStrokeColor(context, 0, 0, 0, 0.15);
 	CGContextSetLineWidth(context, 1.0);
 	CGContextMoveToPoint(context, point.x, 10);
 	CGContextAddLineToPoint(context, point.x, [self bounds].size.height - 10);
@@ -130,7 +129,7 @@
 
 - (void)mouseEntered:(NSEvent *)theEvent {
 	NSPoint enterPoint = [self pointFromMouseEvent:theEvent];
-	self.mouseoverPoint = enterPoint;
+	self.mouseoverPoint = NSMakePoint(enterPoint.x, enterPoint.y - 5);
 	[self setNeedsDisplay:YES];
 }
 - (void)mouseExited:(NSEvent *)theEvent {
@@ -139,7 +138,24 @@
 }
 - (void)mouseMoved:(NSEvent *)theEvent {
 	NSPoint point = [self pointFromMouseEvent:theEvent];
-	self.mouseoverPoint = point;
+	self.mouseoverPoint = NSMakePoint(point.x, point.y - 5);
+	[self setNeedsDisplay:YES];
+}
+
+- (void)scrollWheel:(NSEvent *)theEvent {
+	// Update nearest node
+	NSPoint cursorPoint = [self.window convertScreenToBase:[NSEvent mouseLocation]];
+	EQPoint *nearestPoint = [self hoveringNodeNearPoint:cursorPoint];
+	CGFloat newY = nearestPoint.location.y - [theEvent scrollingDeltaY];
+	if (newY < 10)
+		newY = 10.0;
+	if (newY > [self bounds].size.height - 20)
+		newY = [self bounds].size.height - 20;
+	NSPoint newLocation = NSMakePoint(nearestPoint.location.x, newY);
+	nearestPoint.location = newLocation;
+	
+	// Remove mouseover circle
+	self.mouseoverPoint = NSMakePoint(-10, -10);
 	[self setNeedsDisplay:YES];
 }
 
